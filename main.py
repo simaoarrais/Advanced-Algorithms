@@ -9,11 +9,11 @@ from graph import Graph
 
 
 def main():
-    vertices = 4
-    edges = 10
+    vertices = 3
+    edge_percentage = 1
     seed = 85132
     k = 1
-    G = Graph(vertices,edges,seed, k)
+    G = Graph(vertices, edge_percentage, seed, k)
     G.create_graph()
     pass
 
