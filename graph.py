@@ -83,9 +83,9 @@ class Graph:
 
         # Create number of nodes loop
         for i in range(self.num_vertices):
-            node_coord = (rnd.randint(1, 100), rnd.randint(1, 100))   # node_coord = (x,y)
-
+            
             # Check if node coordinates match or is too close, if so calculates new coordinates
+            node_coord = (rnd.randint(1, 100), rnd.randint(1, 100))
             for node in self.adj:
                 if self.close_check((node.oX, node.oY), node_coord):
                     node_coord = (rnd.randint(1, 100), rnd.randint(1, 100))
@@ -115,88 +115,53 @@ class Graph:
 
         # Calculate how many edges the graph will have and ensure at least 1 edge
         num_edges_graph = math.floor(total_edges * self.edge_percentage)
-        if num_edges_graph == 0:
-            num_edges_graph = math.ceil(total_edges * self.edge_percentage)
         print(f'Number of edges will exist: {num_edges_graph}\n')
-
-
-        # # While the graph still has edges to be
-        while(num_edges_graph > 0):
-            vertices_done = set()
-            # For the number of edges it will exist
-            for i in range(num_edges_graph):
-                print(f'edge number: {i}')
-                node1 = rnd.randint(0, self.num_vertices-1)
-                
-                while(node1 in vertices_done):
-                    node1 = rnd.randint(0, self.num_vertices-1)
-                vertices_done.add(node1)
-                node1 = self.vertices.get(node1)
-                print(f'node1: {node1}')
-
-                # If total edge number is lesser than maximum edges it can be in a node
-                if num_edges_graph < self.num_vertices-1:
-                    node_edges = rnd.randint(0, num_edges_graph)
-                else:
-                    node_edges = rnd.randint(0, self.num_vertices-1)
-                print(f'number of edges: {node_edges}')
-
-                node_edges_set = set()
-                # If node1 will contain edges
-                if node_edges != 0:
-                    # For the number of edges it will contain, calculate node2
-                    for i in range(node_edges):
-                        node2 = rnd.randint(0, self.num_vertices-1) # num_vertices-1 cause first node is node 0
-                        
-                        # Node2 can't be the same as Node1
-                        print(f'node2 before: {node2}')
-                        while (node2 == node1.label or self.vertices.get(node2) in self.adj.get(node1)):
-                            print(f'{node2 == node1.label}, {node2 in node_edges_set}')
-                            node2 = rnd.randint(0, self.num_vertices-1)
-                            print(f'node2: {node2}')
-                        node2 = self.vertices.get(node2)
-                        node_edges_set.add(node2)
-
-                        #Add edge between the 2 nodes
-                        self.add_edge_to_matrix(node1, node2)
-                
-                num_edges_graph -= node_edges
-                print(f'num_edges_graph: {num_edges_graph}')
-
-                print("-----------------------")
 
         #----------------------------------------------------------------
 
-        # # For all nodes
-        # for i in self.vertices:
-        #     node1 = self.vertices.get(i)
-        #     print(f'node1: {node1}')
-            
-        #     # If graph edges is greater than the number of vertices
-        #     node_edges = rnd.randint(0, self.num_vertices-1)    #self.num_vertices-1 não pode ser ele mesmo
-        #     if num_edges_graph > self.num_vertices-1:
-        #         node_edges = rnd.randint(0, self.num_vertices-1)
-        #     else:
-        #         node_edges = rnd.randint(0, num_edges_graph)
-        #     num_edges_graph -= node_edges
-        #     node_edges = num_edges_graph
-        #     print(f'number of edges: {node_edges}')
+        vertices_done = set()
+        # While there are edges left to be given
+        while(num_edges_graph > 0):
 
-        #     # If it will contain edges
-        #     node_edges_set = set()
-        #     if node_edges != 0:
-        #         # For the number of edges it will contain, calculate random node and add edge accordingly
-        #         for i in range(node_edges):
-        #             node2 = rnd.randint(0, self.num_vertices-1) # num_vertices-1 pois o nr começa no 0
-        #             # The random node generated can't be it's own or already in the set
-        #             while (node2 == node1.label or node2 in node_edges_set):
-        #                 node2 = rnd.randint(0, self.num_vertices-1)
-        #             node2 = self.vertices.get(node2)
-        #             print(f'node2: {node2}')
-        #             node_edges_set.add(node2)
-        #             self.add_edge_to_matrix(node1, node2)
-            
-        #     print("-----------------------")
+            node1 = rnd.randint(0, self.num_vertices-1)
+            vertices_done.add(node1)
+            node1 = self.vertices.get(node1)
+            print(f'node1: {node1}')
+
+            # Check if node1 already has the maximum amount of edges
+            node1_edge_set_len = len(self.adj.get(node1)) 
+            print(f'len do set do node1: {node1_edge_set_len}; numero de edges maximo: {self.num_vertices-1} -> {len(self.adj.get(node1)) != self.num_vertices-1}')
+            node1_num_edges_available = self.num_vertices-1 - node1_edge_set_len
+            print(f'edges available: {node1_num_edges_available}')
+
+            # If node1 can be given edges
+            if node1_num_edges_available != 0:
+
+                # Get number of edges node1 will have
+                if node1_num_edges_available < num_edges_graph:
+                    node_edges = rnd.randint(0, node1_num_edges_available)
+                else:
+                    node_edges = rnd.randint(0, num_edges_graph)
+                num_edges_graph -= node_edges
+                print(f'number of edges: {node_edges}')
+                
+                # While there are edges to be given to the node
+                while(node_edges > 0):
+
+                    # If node2 is already in node1 set calculate another node2
+                    node2 = rnd.randint(0, self.num_vertices-1)
+                    while(node1.label == node2 or node2 in [a.label for a in self.adj.get(node1)]):
+                        node2 = rnd.randint(0, self.num_vertices-1)
+                    
+                    # Add edge to adjacency matrix
+                    node2 = self.vertices.get(node2)
+                    print(f'node2: {node2}')
+                    self.add_edge_to_matrix(node1, node2)
+                    print(f'node1 set: {[a.label for a in self.adj.get(node1)]}')
+                    node_edges -= 1
+            else:
+                print("Node has maximum number of edges")
+            print("-----------------------")
 
         #print 
         print(f'\nadj matrix after->')
@@ -205,3 +170,23 @@ class Graph:
             for n in self.adj.get(i):
                 nodes.add(n.label)
             print(f'{i}: {nodes}')
+                    
+    def draw_graph(self):
+        pos = dict()
+        G=nx.Graph()
+
+        # Add nodes to networkx graph
+        G.add_nodes_from(self.vertices.keys())
+
+        # Create a position dictionary
+        for node in self.vertices:
+            node = self.vertices.get(node)
+            pos[node.label] = (node.oX, node.oY)
+
+        # Add edges to networkx graph
+        for node1 in self.adj:
+            for node2 in self.adj.get(node1):
+                G.add_edge(node1.label, node2.label)
+
+        nx.draw(G, pos=pos, with_labels=True)
+        plt.show()
