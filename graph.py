@@ -78,16 +78,6 @@ class Graph:
             self.vertices[i] = node
             self.add_node_to_matrix(node)
             self.adj[node] = set()
-            
-        #print
-        print(f'adj matrix ->')
-        for i in self.adj:
-            print(f'{i}: {self.adj.get(i)}')
-        
-        #print
-        print(f'vertices dic ->')
-        for i in self.vertices:
-            print(f'{i}: {self.vertices.get(i)}')
         
         # Calculate number of edges in a complete graph
         total_edges = (self.num_vertices * (self.num_vertices - 1)) // 2
@@ -107,7 +97,6 @@ class Graph:
 
             # Check if node1 already has the maximum amount of edges
             node1_edge_set_len = len(self.adj.get(node1)) 
-            print(f'len do set do node1: {node1_edge_set_len}; numero de edges maximo: {self.num_vertices-1} -> {len(self.adj.get(node1)) != self.num_vertices-1}')
             node1_num_edges_available = self.num_vertices-1 - node1_edge_set_len
             print(f'edges available: {node1_num_edges_available}')
 
