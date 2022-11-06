@@ -10,16 +10,15 @@ import solution
 
 
 def main():
-    vertices = 5
-    edge_percentage = 0.5
+    vertices = 6
+    edge_percentage = 0.125
     seed = 85132
     G = Graph(vertices, edge_percentage, seed)
 
     G.create_graph()
-    # G.draw_graph()
-
-    print(f'solution: {[a.label for a in solution.brute_solution(G.adj)]}')
-    solution.brute_solution2(G.adj)
+    solution.brute_solution(G.adj)
+    # solution.bfs([], G.adj)
+    #G.draw_graph()
     
 
 if __name__ == "__main__":
