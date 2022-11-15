@@ -9,6 +9,7 @@ class Vertice:
     oY = int()
     w = int()
     label = int()
+    edge_num = int()
 
     # Instance attributes
     def __init__(self, oX, oY, w, label):
@@ -50,6 +51,8 @@ class Graph:
         self.adj.get(u).add(v)
         self.adj.get(v).add(u)
         self.edges.add((u, v))
+        u.edge_num += 1
+        v.edge_num += 1
     
     # Calculates Euclidean Distance between 2 coordinates
     def close_check(self, u, v):
@@ -81,11 +84,11 @@ class Graph:
         
         # Calculate number of edges in a complete graph
         total_edges = (self.num_vertices * (self.num_vertices - 1)) // 2
-        print(f'\nComplete graph edges: {total_edges}')
+        # print(f'\nComplete graph edges: {total_edges}')
 
         # Calculate how many edges the graph will have
         num_edges_graph = math.floor(total_edges * self.edge_percentage)
-        print(f'Number of edges will exist: {num_edges_graph}\n')
+        # print(f'Number of edges will exist: {num_edges_graph}\n')
 
         #----------------------------------------------------------------
         # While there are edges left to be given
@@ -93,12 +96,12 @@ class Graph:
 
             node1 = rnd.randint(0, self.num_vertices-1)
             node1 = self.vertices.get(node1)
-            print(f'node1: {node1}')
+            # print(f'node1: {node1}')
 
             # Check if node1 already has the maximum amount of edges
             node1_edge_set_len = len(self.adj.get(node1)) 
             node1_num_edges_available = self.num_vertices-1 - node1_edge_set_len
-            print(f'edges available: {node1_num_edges_available}')
+            # print(f'edges available: {node1_num_edges_available}')
 
             # If node1 can be given edges
             if node1_num_edges_available != 0:
@@ -109,7 +112,7 @@ class Graph:
                 else:
                     node_edges = rnd.randint(0, num_edges_graph)
                 num_edges_graph -= node_edges
-                print(f'number of edges: {node_edges}')
+                # print(f'number of edges: {node_edges}')
                 
                 # While there are edges to be given to the node
                 while(node_edges > 0):
@@ -121,21 +124,22 @@ class Graph:
                     
                     # Add edge to adjacency matrix
                     node2 = self.vertices.get(node2)
-                    print(f'node2: {node2}')
+                    # print(f'node2: {node2}')
                     self.add_edge_to_matrix(node1, node2)
                     node_edges -= 1
             else:
-                print("Node has maximum number of edges")
-            print("-----------------------")
+                # print("Node has maximum number of edges")
+                pass
+            # print("-----------------------")
 
-        #print 
-        print(f'final adj matrix->')
-        for i in self.adj:
-            nodes = set()
-            for n in self.adj.get(i):
-                nodes.add(n.label)
-            print(f'{i}: {nodes}')
-        print("-----------------------")
+        # #print 
+        # print(f'final adj matrix->')
+        # for i in self.adj:
+        #     nodes = set()
+        #     for n in self.adj.get(i):
+        #         nodes.add(n.label)
+        #     print(f'{i}: {nodes}')
+        # print("-----------------------")
                     
     def draw_graph(self):
         pos = dict()
