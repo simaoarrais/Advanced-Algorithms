@@ -9,7 +9,6 @@ from graph import Graph
 import solution
 import time
 import argparse
-import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
@@ -29,7 +28,7 @@ if __name__ == "__main__":
     vertices = args["vertices"]
     edge_percentage = args["edge"]
     seed = args["seed"]
-    
+
     G = Graph(vertices, edge_percentage, seed)
     print(f'p = {edge_percentage}')
 
@@ -38,6 +37,7 @@ if __name__ == "__main__":
     G.create_graph()
     et_graph = time.time()
     elapsed_time_graph = et_graph - st_graph
+    # print(f'graph creation: {elapsed_time_graph}')
     #------------------------------------------------------------
     # Calculate brute force solution time
     st_brute = time.time()
@@ -53,4 +53,4 @@ if __name__ == "__main__":
     elapsed_time_greedy = et_greedy - st_greedy
     # print(f'greedy time: {elapsed_time_greedy}')
 
-    #G.draw_graph()
+    G.draw_graph()
