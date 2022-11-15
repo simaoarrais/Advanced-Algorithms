@@ -13,10 +13,23 @@ import matplotlib.pyplot as plt
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        description='Program that solves the Independent Set of Size k Problem')
 
-    vertices = 4
-    edge_percentage = 0.5
-    seed = 85132
+    group = parser.add_mutually_exclusive_group(required=False)
+    group.add_argument('-s', '--seed', metavar='SEED', default=85132, type=int, required=False,
+                       help='create a random graph based on a seed (default: %(default)s)')
+    parser.add_argument('-v', '--vertices', metavar='VERTICES', default=4, type=int, required=False,
+                        help='the number of vertices of the graph (default: %(default)s)')
+    parser.add_argument('-e', '--edge', metavar='EDGE DENSITY', default=0.5, type=float, required=False,
+                        help='edge density that will be generated (default: %(default)s)')
+
+    args = vars(parser.parse_args())
+
+    vertices = args["vertices"]
+    edge_percentage = args["edge"]
+    seed = args["seed"]
+    
     G = Graph(vertices, edge_percentage, seed)
     print(f'p = {edge_percentage}')
 
@@ -40,4 +53,4 @@ if __name__ == "__main__":
     elapsed_time_greedy = et_greedy - st_greedy
     # print(f'greedy time: {elapsed_time_greedy}')
 
-    G.draw_graph()
+    #G.draw_graph()
