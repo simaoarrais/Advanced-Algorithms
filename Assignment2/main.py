@@ -18,7 +18,7 @@ if __name__ == "__main__":
     group = parser.add_mutually_exclusive_group(required=False)
     group.add_argument('-s', '--seed', metavar='SEED', default=85132, type=int, required=False,
                        help='create a random graph based on a seed (default: %(default)s)')
-    parser.add_argument('-v', '--vertices', metavar='VERTICES', default=4, type=int, required=False,
+    parser.add_argument('-v', '--vertices', metavar='VERTICES', default=5, type=int, required=False,
                         help='the number of vertices of the graph (default: %(default)s)')
     parser.add_argument('-e', '--edge', metavar='EDGE DENSITY', default=0.5, type=float, required=False,
                         help='edge density that will be generated (default: %(default)s)')
