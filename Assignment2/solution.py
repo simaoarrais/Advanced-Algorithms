@@ -1,51 +1,51 @@
+import math
 import random as rnd
-import copy
-import time
+import graph as Graph
 
 class Solution:
 
     # Instance attributes
-    def __init__(self, adj_matrix, vertices_dict):
-        self.adj_matrix = adj_matrix
-        self.vertices_dict = vertices_dict
+    def __init__(self, graph: Graph):
+        self.adj_matrix = graph.adj
+        self.vertices_dict = graph.vertices_dict
+        self.num_vertices = graph.num_vertices
 
     def solution(self):
         rnd.seed(None)
+        best_solution = set()
         tested_candidates = list()
+        # ------------------------ For each number of vertices ----------------------- #
+        for n in range(1, self.num_vertices + 1):
 
-        # Calculate how many vertices the candidate solution will have
-        num_vertices_candidate = rnd.randint(2, len(self.vertices_dict.keys())) # candidate solutions must have at least 2 vertices
-        print(f"num_vertices_candidate : {num_vertices_candidate}")
-
-        time_loop_duration = 10 # seconds
-        time_loop_start = time.time()
-        while(time.time() < time_loop_start + time_loop_duration):
-
-            # Calculate what vertices will belong to the candidate solution
-            candidate_set = set()
-            remaining_vertices = copy.copy(self.vertices_dict)
-            for i in range(num_vertices_candidate):
-
-                # Random choice of vertex
-                vertice_label = rnd.choice(list(remaining_vertices.keys()))
-                vertice = self.vertices_dict.get(vertice_label)
-
-                # Add vertex to candidate solution and delete it for future random choice
-                candidate_set.add(vertice)
-                del remaining_vertices[vertice_label]
-
-            # Add candidate solution to tested solutions list
-            tested_candidates.append(tested_candidates)
-
-            print(f"candidate -> {[v.label for v in candidate_set]}")
-            print(self.is_independent_set(candidate_set))
-            if self.is_independent_set(candidate_set):
+            # ------------ If the candidate solution will contain all vertices ----------- #
+            if n == self.num_vertices:
+                print(f'all: {[v.label for v in self.adj_matrix.keys()]} -> {self.is_independent_set(self.adj_matrix.keys())}')
+                if self.is_independent_set(self.adj_matrix.keys()):
+                    best_solution = set(self.adj_matrix.keys())
                 break
 
-            pass
+            comb = self.calculate_combinations(n)
+            print(f'combination: {comb}')
+            # ---------------------- For the amount of combinations ---------------------- #
+            for i in range(comb):
 
-    # Check if the candidate set is an independent set
+                # ------------------ Calculate a random candidate of size n ------------------ #
+                candidate_set = self.get_candidate_set(n)
+                while (candidate_set in tested_candidates):
+                    candidate_set = self.get_candidate_set(n)
+
+                # --------------- Check if candidate set is an independent set --------------- #
+                print([v.label for v in candidate_set])
+                tested_candidates.append(candidate_set)
+                if self.is_independent_set(candidate_set):
+                    best_solution = candidate_set
+                    break
+                
+        print(f'best: {[v.label for v in best_solution]}')
+
+
     def is_independent_set(self, candidate_set):
+        '''Check if the candidate set is an independent set'''
 
         # For each node in the candidate solution
         for node in candidate_set:
@@ -57,6 +57,16 @@ class Solution:
         return True
     
 
-    # Return list with similarity between 2 structures
+    def get_candidate_set(self, num_vertices_candidate):
+        candidate_set = set(rnd.sample(list(self.adj_matrix.keys()), k = num_vertices_candidate))
+        return candidate_set
+
+
     def similarity(self, structure1, structure2):
+        '''Return list with similarity between 2 structures'''
         return [x for x in structure1 if x in structure2]
+
+
+    def calculate_combinations(self, r):
+        '''Calculates the combination value of nCr'''
+        return math.comb(self.num_vertices, r)

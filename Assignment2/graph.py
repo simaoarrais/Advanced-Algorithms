@@ -4,12 +4,6 @@ import random as rnd
 import math
 
 class Vertice:
-    # Class attributes
-    oX = int()
-    oY = int()
-    w = int()
-    label = int()
-    edge_num = int()
 
     # Instance attributes
     def __init__(self, oX, oY, w, label):
@@ -17,27 +11,22 @@ class Vertice:
         self.oY = oY
         self.weight = w
         self.label = label
+        self.edge_num = int()
 
     def __str__(self):
         return f'{self.label}'
         #return f'NODE: {self.label} -> oX: {self.oX}; oY: {self.oY}; w: {self.weight}'
 
 class Graph:
-    # Class attributes
-    num_vertices = int()
-    seed = int()
-    k = float()
-    adj = dict()
-    vertices = dict()
-    edges = set()
     
-
     # Instance attributes
     def __init__(self, num_vertices, edge_percentage, seed):
         self.num_vertices = num_vertices
         self.edge_percentage = edge_percentage
         self.seed = seed
-        self.counter = 0
+        self.vertices_dict = dict()
+        self.adj = dict()
+        self.edges = set()
 
     # Adds a node to adjacency matrix
     def add_node_to_matrix(self, u):
@@ -78,7 +67,7 @@ class Graph:
             node = Vertice(node_coord[0], node_coord[1], node_weight, i)
 
             # Add node to dictionary of vertices and also add node to graph and assign it an empty set
-            self.vertices[i] = node
+            self.vertices_dict[i] = node
             self.add_node_to_matrix(node)
             self.adj[node] = set()
         
@@ -95,7 +84,7 @@ class Graph:
         while(num_edges_graph > 0):
 
             node1 = rnd.randint(0, self.num_vertices-1)
-            node1 = self.vertices.get(node1)
+            node1 = self.vertices_dict.get(node1)
             # print(f'node1: {node1}')
 
             # Check if node1 already has the maximum amount of edges
@@ -123,7 +112,7 @@ class Graph:
                         node2 = rnd.randint(0, self.num_vertices-1)
                     
                     # Add edge to adjacency matrix
-                    node2 = self.vertices.get(node2)
+                    node2 = self.vertices_dict.get(node2)
                     # print(f'node2: {node2}')
                     self.add_edge_to_matrix(node1, node2)
                     node_edges -= 1
@@ -140,17 +129,17 @@ class Graph:
         #         nodes.add(n.label)
         #     print(f'{i}: {nodes}')
         # print("-----------------------")
-                    
+
     def draw_graph(self):
         pos = dict()
         G = nx.Graph()
 
         # Add nodes to networkx graph
-        G.add_nodes_from(self.vertices.keys())
+        G.add_nodes_from(self.vertices_dict.keys())
 
         # Create a position dictionary
-        for node in self.vertices:
-            node = self.vertices.get(node)
+        for node in self.vertices_dict:
+            node = self.vertices_dict.get(node)
             pos[node.label] = (node.oX, node.oY)
 
         # Add edges to networkx graph

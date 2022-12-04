@@ -30,7 +30,7 @@ if __name__ == "__main__":
     seed = args["seed"]
 
     G = Graph(vertices, edge_percentage, seed)
-    print(f'p = {edge_percentage}')
+    print(f'vertices = {vertices}, p = {edge_percentage}, seed = {seed}')
 
     #Calculate graph creation time
     st_graph = time.time()
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     #------------------------------------------------------------
     # Solution
     st_brute = time.time()
-    solution = Solution(G.adj, G.vertices)
+    solution = Solution(G)
     solution.solution()
     et_brute = time.time()
     elapsed_time_brute = et_brute - st_brute
