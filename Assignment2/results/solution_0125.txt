@@ -1,0 +1,152 @@
+vertices = 2
+graph creation: 4.27e-05
+best_len: 2
+generated_solutions: 1
+tested_candidates: 1
+basic_operations: 23
+len_last_solution: 2
+solution time: 9.44e-05
+vertices = 3
+graph creation: 4.20e-05
+best_len: 3
+generated_solutions: 2
+tested_candidates: 2
+basic_operations: 41
+len_last_solution: 3
+solution time: 4.01e-05
+vertices = 4
+graph creation: 4.86e-05
+best_len: 4
+generated_solutions: 3
+tested_candidates: 3
+basic_operations: 62
+len_last_solution: 4
+solution time: 5.48e-05
+vertices = 5
+graph creation: 7.96e-05
+best_len: 4
+generated_solutions: 6
+tested_candidates: 6
+basic_operations: 91
+len_last_solution: 5
+solution time: 6.34e-05
+vertices = 6
+graph creation: 4.24e-05
+best_len: 5
+generated_solutions: 5
+tested_candidates: 5
+basic_operations: 98
+len_last_solution: 6
+solution time: 3.81e-05
+vertices = 7
+graph creation: 5.03e-05
+best_len: 5
+generated_solutions: 16
+tested_candidates: 12
+basic_operations: 209
+len_last_solution: 7
+solution time: 1.10e-04
+vertices = 8
+graph creation: 5.60e-05
+best_len: 7
+generated_solutions: 15
+tested_candidates: 14
+basic_operations: 209
+len_last_solution: 8
+solution time: 9.56e-05
+vertices = 9
+graph creation: 6.72e-05
+best_len: 7
+generated_solutions: 41
+tested_candidates: 33
+basic_operations: 401
+len_last_solution: 9
+solution time: 3.18e-04
+vertices = 10
+graph creation: 8.13e-05
+best_len: 9
+generated_solutions: 29
+tested_candidates: 27
+basic_operations: 399
+len_last_solution: 10
+solution time: 1.98e-04
+vertices = 11
+graph creation: 8.99e-05
+best_len: 8
+generated_solutions: 99
+tested_candidates: 65
+basic_operations: 766
+len_last_solution: 11
+solution time: 7.28e-04
+vertices = 12
+graph creation: 1.05e-04
+best_len: 11
+generated_solutions: 43
+tested_candidates: 38
+basic_operations: 504
+len_last_solution: 12
+solution time: 3.45e-04
+vertices = 13
+graph creation: 1.31e-04
+best_len: 11
+generated_solutions: 113
+tested_candidates: 87
+basic_operations: 985
+len_last_solution: 13
+solution time: 9.78e-04
+vertices = 14
+graph creation: 1.29e-04
+best_len: 9
+generated_solutions: 858
+tested_candidates: 689
+basic_operations: 5451
+len_last_solution: 14
+solution time: 1.33e-02
+vertices = 15
+graph creation: 1.63e-04
+best_len: 12
+generated_solutions: 180
+tested_candidates: 144
+basic_operations: 1790
+len_last_solution: 15
+solution time: 1.61e-03
+vertices = 16
+graph creation: 1.77e-04
+best_len: 13
+generated_solutions: 229
+tested_candidates: 178
+basic_operations: 1745
+len_last_solution: 16
+solution time: 2.18e-03
+vertices = 17
+graph creation: 1.84e-04
+best_len: 12
+generated_solutions: 1482
+tested_candidates: 1243
+basic_operations: 11227
+len_last_solution: 17
+solution time: 3.32e-02
+vertices = 18
+graph creation: 2.08e-04
+best_len: 15
+generated_solutions: 256
+tested_candidates: 220
+basic_operations: 2031
+len_last_solution: 18
+solution time: 3.70e-03
+vertices = 19
+graph creation: 4.96e-04
+best_len: 13
+generated_solutions: 5599
+tested_candidates: 4927
+basic_operations: 46577
+len_last_solution: 19
+solution time: 4.28e-01
+vertices = 20
+graph creation: 2.39e-04
+best_len: 15
+generated_solutions: 3576
+tested_candidates: 3220
+basic_operations: 27331
+len_last_solution: 20
+solution time: 1.51e-01
