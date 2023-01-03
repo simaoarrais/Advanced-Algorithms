@@ -5,9 +5,11 @@ Main python code for the Advanced Algorithms class Assigment 3.
 
 The code was tested on python version 3.8.10.
 """
+from counter import Counter
+
 import argparse
+import re
 import os
-import sys
 
 def main():
     parser = argparse.ArgumentParser(description='Distinct Word Counting Program')
@@ -31,6 +33,16 @@ def main():
     elif not os.path.isdir(stopw_dir):
         raise parser.error("The given directory for the stop words is invalid!")
 
+    # Get all books and language
+    # books = os.listdir(books_dir)
+    books = ['dorian_gray(en).txt']
+    regex = re.compile(r'\((.*?)\)')
+    for filename in books:
+        language = regex.findall(filename)
+        file_path = f'{books_dir}/{filename}'
+        stopw_path = f'{stopw_dir}/{language[0]}.txt'
+        counter = Counter(file_path, stopw_path)
+        counter.start()
 
 if __name__ == "__main__":
     main()
