@@ -20,11 +20,15 @@ def main():
     
     parser.add_argument('-s', '--stopw_dir', metavar='STOPWORDS_DIRECTORY', default='stopw', type=str, required=False,
                         help='path where the stop words are stored -> default: /%(default)s/')
+    
+    parser.add_argument('-p', '--prob', metavar='PROBABILITY', default=1/16, type=int, required=False,
+                        help='probability for approximate counter -> default: %(default)s')
 
     # Parse the command-line arguments
     args = parser.parse_args()
     books_dir = args.books_dir
     stopw_dir = args.stopw_dir
+    prob = args.prob
 
     # Check if directories are valid
     if not os.path.isdir(books_dir):
@@ -41,7 +45,7 @@ def main():
         language = regex.findall(filename)
         file_path = f'{books_dir}/{filename}'
         stopw_path = f'{stopw_dir}/{language[0]}.txt'
-        counter = Counter(file_path, stopw_path)
+        counter = Counter(file_path, stopw_path, prob)
         counter.start()
 
 if __name__ == "__main__":
