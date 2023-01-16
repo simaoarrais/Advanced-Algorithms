@@ -48,15 +48,14 @@ def main():
 
     regex = re.compile(r'\((.*?)\)')
 
-    for k in k_list:
-        for filename in books:
-            language = regex.findall(filename)
-            file_path = f'{books_dir}/{filename}'
-            stopw_path = f'{stopw_dir}/{language[0]}.txt'
-            results_file = f'{k}-{language[0]}'
+    for filename in books:
+        language = regex.findall(filename)
+        file_path = f'{books_dir}/{filename}'
+        stopw_path = f'{stopw_dir}/{language[0]}.txt'
+        results_file = f'{language[0]}'
 
-            counter = Counter(file_path, stopw_path, prob, k, results_file)
-            counter.start()
+        counter = Counter(file_path, stopw_path, prob, k_list, results_file)
+        counter.start()
 
 if __name__ == "__main__":
     main()
