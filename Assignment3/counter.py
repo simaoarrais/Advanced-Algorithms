@@ -3,14 +3,17 @@ from collections import defaultdict
 
 import random
 import re
+import shutil
+import os
 
 class Counter:
 
-    def __init__(self, file_path, stopw_path, prob, data_file):
+    def __init__(self, file_path, stopw_path, prob, k, results_file):
         self.file_path = file_path
         self.stopw_path = stopw_path
         self.prob = prob
-        self.data_file = data_file
+        self.k = k
+        self.results_file = results_file
         self.regex_words = re.compile(r"[a-zA-ZÀ-ÿ’]+")
         self.regex_letters = re.compile(r"[a-zA-ZÀ-ÿ]")
         self.regex_numbers = re.compile(r"[0-9]+")
@@ -18,6 +21,16 @@ class Counter:
     def read(self, file):
         with open(file, 'r') as f:
             return f.read()
+    
+    def write(self, file, string):
+        folder_name = "results"
+
+        # Check if folder results exists
+        if not os.path.isdir(folder_name):
+            os.mkdir(folder_name)  
+
+        with open(f'{folder_name}/{file}.txt', 'a') as f:
+            f.write(string)
     
     def process_data(self, contents, stop_words):
         # Get all words and filter through stop-words
@@ -42,7 +55,7 @@ class Counter:
         return freq
     
     def approximate_counter(self, contents, prob = 1/16):
-        freq_counter = dict()
+        freq_counter = collections_counter()
 
         for letter in contents:
             if random.random() <= prob:
@@ -50,12 +63,15 @@ class Counter:
                     freq_counter[letter] += 1
                 else: 
                     freq_counter[letter] = 1
-        
+
+        for letter in freq_counter:
+            freq_counter[letter] /= prob
+
         return freq_counter
 
     def misra_gries_counter(self, stream, k):
         # Initialization
-        A = dict()
+        A = collections_counter()
 
         # Processing
         for j in stream:
@@ -69,9 +85,58 @@ class Counter:
                     if A[i] == 0:
                         del A[i]
 
-        # Output
-        top_k = sorted(A.items(), key=lambda x: x[1], reverse=True)
-        return top_k
+        return A
+    
+    def average_approximation(self, exact_count, contents, prob = 1/16):
+        avg_approx_counter = collections_counter()
+        avg_error_counter = dict() # {Letter: [min_relative_error, max_relative_error, avg_relative_error, min_absolute_error, max_absolute_error, avg_absolute_error]}
+        avg_denominator = 10
+
+        for i in range(avg_denominator):
+            approx_dict = self.approximate_counter(contents, self.prob)
+
+            # Check for errors
+            for k,v in approx_dict.items():
+
+                # Build final average counter
+                if k not in avg_approx_counter:
+                    avg_approx_counter[k] = v
+                else:
+                    avg_approx_counter[k] += v
+
+                # Calculate errors
+                approx_value = approx_dict[k]
+                exact_value = exact_count[k]
+                relative_error = (approx_value - exact_value)/exact_value
+                absolute_error = approx_value - exact_value
+                
+                if k not in avg_error_counter:
+                    avg_error_counter[k] = [relative_error, relative_error, abs(relative_error), absolute_error, absolute_error, abs(absolute_error)]
+                else:
+                    # avg_error_counter = {Letter: [min_relative_error, max_relative_error, avg_relative_error, min_absolute_error, max_absolute_error, avg_absolute_error]}
+                    letter_info = avg_error_counter[k]
+
+                    # Relative errors
+                    if relative_error < letter_info[0]:
+                        letter_info[0] = relative_error
+                    elif relative_error > letter_info[1]:
+                        letter_info[1] = relative_error
+                    letter_info[2] += abs(relative_error)
+                
+                    # Absolute errors
+                    if absolute_error < letter_info[3]:
+                        letter_info[3] = absolute_error
+                    elif absolute_error > letter_info[4]:
+                        letter_info[4] = absolute_error
+                    letter_info[5] += abs(absolute_error)
+            
+        # Get an average for the final dictionary
+        for k,v in approx_dict.items():
+            avg_approx_counter[k] = round(avg_approx_counter[k] / avg_denominator)
+            avg_error_counter[k][2] /= avg_denominator
+            avg_error_counter[k][5] /= avg_denominator
+        
+        return avg_approx_counter, avg_error_counter
 
     def start(self):
         # Read contents from file and stop-words
@@ -80,20 +145,23 @@ class Counter:
 
         # Process the contents
         letter_list = self.process_data(contents, stop_words)
-        # letter_list = ['T', 'H', 'E', 'P', 'R', 'E', 'F', 'A', 'C', 'E', 'T', 'H', 'E', 'A', 'R', 'T', 'I', 'S', 'T', 'C', 'R', 'E', 'A', 'T', 'O', 'R', 'B', 'E', 'A', 'U', 'T', 'I', 'F']
 
         # Exact counter
         freq_count = self.exact_counter(letter_list)
         sorted_count_dict = freq_count.most_common()
+        self.write(self.results_file, f'Exact - {sorted_count_dict}')
+        self.write(self.results_file, "\n")
 
         # Approximate counter
-        approx_dict = self.approximate_counter(letter_list, self.prob)
+        avg_approx_dict, error_dict = self.average_approximation(freq_count, letter_list, self.prob)
+        sorted_approx_dict = avg_approx_dict.most_common()
+        sorted_error_dict = sorted(error_dict.items(), key=lambda x: x[1][5], reverse=True)
+        self.write(self.results_file, f'Approximate - {sorted_approx_dict}')
+        self.write(self.results_file, f'Error - {sorted_error_dict}')
+        self.write(self.results_file, "\n")
 
         # Misra & Gries
-        data_stream = self.read(self.data_file)
-        data_stream = self.apply_regex(data_stream, self.regex_numbers)
-        k = 3
-        print(self.exact_counter(letter_list).most_common()[:k])
-        print("\n\n\n\n\n\n\n\n")
-        data_count = self.misra_gries_counter(letter_list, k)
-        print(data_count)
+        data_count = self.misra_gries_counter(letter_list, self.k)
+        sorted_misra_gries = data_count.most_common()
+        self.write(self.results_file, f'Stream - {sorted_misra_gries}')
+        self.write(self.results_file, "\n")
