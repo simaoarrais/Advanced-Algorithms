@@ -157,6 +157,7 @@ class Counter:
         sorted_approx_dict = avg_approx_dict.most_common()
         sorted_error_dict = sorted(error_dict.items(), key=lambda x: x[1][5], reverse=True)
         self.write(self.results_file, f'Approximate - {sorted_approx_dict}')
+        self.write(self.results_file, "\n")
         self.write(self.results_file, f'Error - {sorted_error_dict}')
         self.write(self.results_file, "\n")
 
