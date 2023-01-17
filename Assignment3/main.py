@@ -30,7 +30,7 @@ def main():
     books_dir = args.books_dir
     stopw_dir = args.stopw_dir
     prob = args.prob
-    k_list = [3, 5, 10, 15]
+    k_list = [3, 5, 10, 15, 20]
 
     # Check if directories are valid
     if not os.path.isdir(books_dir):
